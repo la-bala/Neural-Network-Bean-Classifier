@@ -64,31 +64,36 @@ class NeuralNet:
                     print("Creating neural network with " + str(activation) + " activation function, " + str(rate) + " learning rate, " + str(max) + " max iterations.")
                     neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5,
                     learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=False)
-                    # Train the model on the training data
-                    plot_x = []
-                    plot_y = []
-                    for i in range(0, max - 1):
+
+                    plot_x = [] #Stores each epoch number from 1 to max
+                    plot_y = [] #Stores the accuracy for each epoch
+
+                    # Train the model on the training data, running each epoch manually by calling partial_fit each iteration of the for loop, instead of calling fit once
+                    for i in range(1, max):
+                        #Update the model with a single iteration (epoch)
                         neural_network.partial_fit(self.X_train, self.y_train, np.unique(self.y))
+                        #add the current epoch number (x coordinate) to the plot
                         plot_x.append(i)
+                        #Get the mean accuracy for this epoch (y coordinate) and add it to the plot
                         accuracy = neural_network.score(self.X_test, self.y_test)
                         plot_y.append(accuracy)
-                    # neural_network.fit(self.X_train, self.y_train)
+
                     # Test the model on the training data
                     y_train_predictions = neural_network.predict(self.X_train)
                     # Test the model on the test data
                     y_test_predictions = neural_network.predict(self.X_test)
 
                     rmse = (np.sqrt(mean_squared_error(self.y_train, y_train_predictions)))
-                    r2 = r2_score(self.y_train, y_train_predictions)
+                    accuracy = neural_network.score(self.X_train, self.y_train)
 
                     print("Training set performance:")
-                    print('RMSE is {}, R2 score is {}'.format(rmse, r2))
+                    print('RMSE is {}, Accuracy is {}'.format(rmse, accuracy))
 
                     rmse = (np.sqrt(mean_squared_error(self.y_test, y_test_predictions)))
-                    r2 = r2_score(self.y_test, y_test_predictions)
+                    accuracy = neural_network.score(self.X_test, self.y_test)
 
                     print("Test set performance:")
-                    print('RMSE is {}, R2 score is {}'.format(rmse, r2))
+                    print('RMSE is {}, Accuracy is {}'.format(rmse, accuracy))
                     print("\n")
 
                     # TODO: Plot the model history for each model in a single plot
