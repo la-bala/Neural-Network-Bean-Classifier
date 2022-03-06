@@ -16,10 +16,10 @@ The dataset was found from the UCI open datasets repository at: https://archive.
 Uploaded to a public s3 bucket, dataset should download to memory automatically when run.
 
 ### Libraries and sources used
-Provided NeuralNet-2.py file used as starting point.
-sklearn
-numpy
-pandas
+Provided NeuralNet-2.py file used as starting point.\
+sklearn\
+numpy\
+pandas\
 seaborn
 
 ### Number of late days used
