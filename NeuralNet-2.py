@@ -1,13 +1,3 @@
-#####################################################################################################################
-#   Assignment 2: Neural Network Analysis
-#   This is a starter code in Python 3.6 for a neural network.
-#   You need to have numpy and pandas installed before running this code.
-#   You need to complete all TODO marked sections
-#   You are free to modify this code in any way you want, but need to mention it
-#       in the README file.
-#
-#####################################################################################################################
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -27,7 +17,7 @@ class NeuralNet:
     #   categorical to numerical, etc
     def preprocess(self):
         self.processed_data = self.raw_input
-        #convert categorical bean classes to numbers
+        #Convert categorical bean classes to numbers. Bean class names are in Turkish.
         self.processed_data['Class'].replace(['SEKER', 'BARBUNYA', 'BOMBAY', 'CALI', 'DERMASON', 'HOROZ', 'SIRA'],
                         [0, 1, 2, 3, 4, 5, 6], inplace=True)
         #take a look at the processed data
@@ -39,6 +29,8 @@ class NeuralNet:
         #divide attributes (X) from class (Y) which is the target that we want to predict
         X = self.processed_data.iloc[:, 0:(ncols - 1)]
         y = self.processed_data.iloc[:, (ncols-1)]
+
+        #randomly splits training and test data
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             X, y)
 
@@ -58,16 +50,16 @@ class NeuralNet:
     #       different color for each model
 
     def train_evaluate(self):
-        # Below are the hyperparameters that you need to use for model
-        #   evaluation
+        # Below are the hyperparameters that you need to use for model evaluation
         activations = ['logistic', 'tanh', 'relu']
         learning_rate = [0.01, 0.1]
         max_iterations = [100, 200] # also known as epochs
-        num_hidden_layers = [2, 3]
+        num_hidden_layers = [6] #array with the ith element representing the # of neurons in the ith hidden layer.
 
         # Create the neural network and be sure to keep track of the performance metrics
         # TODO: cycle through activations, learning rates, max iterations
-        neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5, learning_rate_init=learning_rate[0], max_iter=max_iterations[1])
+        neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5,
+        learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=True)
         #Train the model on the training data
         neural_network.fit(self.X_train, self.y_train)
         #Test the model on the training data
@@ -91,7 +83,7 @@ class NeuralNet:
         print('R2 score is {}'.format(r2))
         print("\n")
 
-        # Plot the model history for each model in a single plot
+        # TODO: Plot the model history for each model in a single plot
         # model history is a plot of accuracy vs number of epochs
         # you may want to create a large sized plot to show multiple lines
         # in a same figure.
