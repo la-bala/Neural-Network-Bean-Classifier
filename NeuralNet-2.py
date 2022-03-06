@@ -58,35 +58,39 @@ class NeuralNet:
 
         # Create the neural network and be sure to keep track of the performance metrics
         # TODO: cycle through activations, learning rates, max iterations
-        neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5,
-        learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=True)
-        #Train the model on the training data
-        neural_network.fit(self.X_train, self.y_train)
-        #Test the model on the training data
-        y_train_predictions = neural_network.predict(self.X_train)
-        #Test the model on the test data
-        y_test_predictions = neural_network.predict(self.X_test)
+        for activation in activations:
+            for rate in learning_rate:
+                for max in max_iterations:
+                    print("Creating neural network with " + str(activation) + " activation function, " + str(rate) + " learning rate, " + str(max) + " max iterations.")
+                    neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5,
+                    learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=True)
+                    #Train the model on the training data
+                    neural_network.fit(self.X_train, self.y_train)
+                    #Test the model on the training data
+                    y_train_predictions = neural_network.predict(self.X_train)
+                    #Test the model on the test data
+                    y_test_predictions = neural_network.predict(self.X_test)
 
-        rmse = (np.sqrt(mean_squared_error(self.y_train, y_train_predictions)))
-        r2 = r2_score(self.y_train, y_train_predictions)
+                    rmse = (np.sqrt(mean_squared_error(self.y_train, y_train_predictions)))
+                    r2 = r2_score(self.y_train, y_train_predictions)
 
-        print("Training set performance:")
-        print('RMSE is {}'.format(rmse))
-        print('R2 score is {}'.format(r2))
-        print("\n")
+                    print("Training set performance:")
+                    print('RMSE is {}'.format(rmse))
+                    print('R2 score is {}'.format(r2))
+                    print("\n")
 
-        rmse = (np.sqrt(mean_squared_error(self.y_test, y_test_predictions)))
-        r2 = r2_score(self.y_test, y_test_predictions)
+                    rmse = (np.sqrt(mean_squared_error(self.y_test, y_test_predictions)))
+                    r2 = r2_score(self.y_test, y_test_predictions)
 
-        print("Test set performance:")
-        print('RMSE is {}'.format(rmse))
-        print('R2 score is {}'.format(r2))
-        print("\n")
+                    print("Test set performance:")
+                    print('RMSE is {}'.format(rmse))
+                    print('R2 score is {}'.format(r2))
+                    print("\n")
 
-        # TODO: Plot the model history for each model in a single plot
-        # model history is a plot of accuracy vs number of epochs
-        # you may want to create a large sized plot to show multiple lines
-        # in a same figure.
+                    # TODO: Plot the model history for each model in a single plot
+                    # model history is a plot of accuracy vs number of epochs
+                    # you may want to create a large sized plot to show multiple lines
+                    # in a same figure.
 
         return 0
 
