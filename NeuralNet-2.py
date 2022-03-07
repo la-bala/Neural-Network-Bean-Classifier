@@ -57,6 +57,15 @@ class NeuralNet:
         max_iterations = [100, 200] # also known as epochs
         num_hidden_layers = [6] #array with the ith element representing the # of neurons in the ith hidden layer.
 
+        #total number of networks that will be created
+        num_networks = len(activations) * len(learning_rate) * len(max_iterations) #update this if testing with more than one hidden layer configuration
+        #keeps track of which network is currently being trained
+        network_index = 0
+
+        plot_x_list = [[0] for i in range(num_networks)] #For each network, stores a list of epoch numbers from 1 to the current value of max_iterations
+        plot_y_list = [[0] for i in range(num_networks)] #For each network, stores the accuracy for each epoch
+
+
         # Create the neural network and be sure to keep track of the performance metrics
         for activation in activations:
             for rate in learning_rate:
@@ -65,18 +74,15 @@ class NeuralNet:
                     neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=num_hidden_layers, alpha=1e-5,
                     learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=False)
 
-                    plot_x = [] #Stores each epoch number from 1 to max
-                    plot_y = [] #Stores the accuracy for each epoch
-
                     # Train the model on the training data, running each epoch manually by calling partial_fit each iteration of the for loop, instead of calling fit once
                     for i in range(1, max):
                         #Update the model with a single iteration (epoch)
                         neural_network.partial_fit(self.X_train, self.y_train, np.unique(self.y))
                         #add the current epoch number (x coordinate) to the plot
-                        plot_x.append(i)
+                        plot_x_list[network_index].append(i)
                         #Get the mean accuracy for this epoch (y coordinate) and add it to the plot
                         accuracy = neural_network.score(self.X_test, self.y_test)
-                        plot_y.append(accuracy)
+                        plot_y_list[network_index].append(accuracy)
 
                     # Test the model on the training data
                     y_train_predictions = neural_network.predict(self.X_train)
@@ -96,17 +102,21 @@ class NeuralNet:
                     print('RMSE is {}, Accuracy is {}'.format(rmse, accuracy))
                     print("\n")
 
-                    # TODO: Plot the model history for each model in a single plot
-                    # model history is a plot of accuracy vs number of epochs
-                    # you may want to create a large sized plot to show multiple lines
-                    # in a same figure.
+                    network_index+=1
 
-                    graph_r2 = sns.relplot(x = plot_x, y = plot_y)
-                    graph_r2.set_xlabels("Epochs")
-                    graph_r2.set_ylabels("Accuracy")
+        # TODO: Plot the model history for each model in a single plot
+        # model history is a plot of accuracy vs number of epochs
+        # you may want to create a large sized plot to show multiple lines
+        # in a same figure.
 
-                    plt.title("Model history for this model")
-                    plt.show()
+        for i in range(0, num_networks):
+            plt.plot(plot_x_list[i], plot_y_list[i], label = "Network " + str(i))
+        
+        
+        plt.xlabel("Epochs")
+        plt.ylabel("Accuracy")
+        plt.title("Model history")
+        plt.show()
 
         return 0
 
