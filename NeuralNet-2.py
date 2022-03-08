@@ -55,7 +55,7 @@ class NeuralNet:
         activations = ['logistic', 'tanh', 'relu']
         learning_rate = [0.01, 0.1]
         max_iterations = [100, 200] # also known as epochs
-        num_hidden_layers = [[6], [2,3]] #array with the ith element representing the # of neurons in the ith hidden layer.
+        num_hidden_layers = [[6], [2,3]] #array of arrays with the ith element representing the # of neurons in the ith hidden layer.
 
         #total number of networks that will be created
         num_networks = len(activations) * len(learning_rate) * len(max_iterations) * len(num_hidden_layers) #update this if testing with more than one hidden layer configuration
@@ -65,6 +65,16 @@ class NeuralNet:
         plot_x_list = [[0] for i in range(num_networks)] #For each network, stores a list of epoch numbers from 1 to the current value of max_iterations
         plot_y_list = [[0] for i in range(num_networks)] #For each network, stores the accuracy for each epoch
 
+        results_dic = {
+            "Activation Function": [],
+            "Learning Rate": [],
+            "Max Iterations": [],
+            "Hidden Layer Topology": [],
+            "Training Data Accuracy": [],
+            "Test Data Accuracy": [],
+            "Training Data Error": [],
+            "Test Data Error": [],
+        }
 
         # Create the neural network and be sure to keep track of the performance metrics.
         # This is going to create 3 * 2 * 2 * 2 models, to reduce how long it takes to run, reduce the variety of hyperparameters above.
@@ -73,6 +83,10 @@ class NeuralNet:
                 for max in max_iterations:
                     for topology in num_hidden_layers:
                         print("Creating neural network with " + str(activation) + " activation function, " + str(rate) + " learning rate, " + str(max) + " max iterations, and hidden layers as follows: " + str(topology))
+                        results_dic["Activation Function"].append(str(activation))
+                        results_dic["Learning Rate"].append(rate)
+                        results_dic["Max Iterations"].append(max)
+                        results_dic["Hidden Layer Topology"].append(str(topology))
                         neural_network = MLPClassifier(activation=activations[0], hidden_layer_sizes=topology, alpha=1e-5,
                         learning_rate_init=learning_rate[0], max_iter=max_iterations[1], verbose=False)
 
@@ -97,6 +111,9 @@ class NeuralNet:
                         print("Training set performance:")
                         print('RMSE is {}, Accuracy is {}'.format(rmse, accuracy))
 
+                        results_dic["Training Data Error"].append(str(rmse))
+                        results_dic["Training Data Accuracy"].append(str(accuracy))
+
                         rmse = (np.sqrt(mean_squared_error(self.y_test, y_test_predictions)))
                         accuracy = neural_network.score(self.X_test, self.y_test)
 
@@ -104,12 +121,18 @@ class NeuralNet:
                         print('RMSE is {}, Accuracy is {}'.format(rmse, accuracy))
                         print("\n")
 
+                        results_dic["Test Data Error"].append(str(rmse))
+                        results_dic["Test Data Accuracy"].append(str(accuracy))
+
                         network_index+=1
 
         # TODO: Plot the model history for each model in a single plot
         # model history is a plot of accuracy vs number of epochs
         # you may want to create a large sized plot to show multiple lines
         # in a same figure.
+
+        output_table = pd.DataFrame(results_dic)
+        output_table.to_csv('outputtable.csv', index=True)
 
         for i in range(0, num_networks):
             plt.plot(plot_x_list[i], plot_y_list[i], label = "Network " + str(i))

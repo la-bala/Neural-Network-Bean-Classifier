@@ -5,7 +5,13 @@
 ### Hayden Iske and Leo Bala
 
 ### How to run the program
+In a terminal, execute:\
 python NeuralNet-2.py
+
+Make sure all libraries used, listed below, are installed.\
+
+Results of each model are printed to standard output as well as included in a outputtable.csv file created after the program is run. Each run will update outputtable.csv.\
+Before the program ends the plot of model history will appear in a new window. The program ends once you close this plot.
 
 ### Results summary
 x activation function performed the best and y is why we think so. a b c other hyperparameters performed the best.
