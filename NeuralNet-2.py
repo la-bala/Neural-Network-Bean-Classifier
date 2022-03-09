@@ -13,16 +13,14 @@ class NeuralNet:
     def __init__(self, dataFile, header=True):
         self.raw_input = pd.read_excel(dataFile)
 
-    # TODO: Write code for pre-processing the dataset, which would include
+    # Code for pre-processing the dataset, which includes
     # standardization, normalization,
-    #   categorical to numerical, etc
+    # categorical to numerical, etc
     def preprocess(self):
         self.processed_data = self.raw_input
         #Convert categorical bean classes to numbers. Bean class names are in Turkish.
         self.processed_data['Class'].replace(['SEKER', 'BARBUNYA', 'BOMBAY', 'CALI', 'DERMASON', 'HOROZ', 'SIRA'],
                         [0, 1, 2, 3, 4, 5, 6], inplace=True)
-        #take a look at the processed data
-        print(self.processed_data)
 
         ncols = len(self.processed_data.columns)
         nrows = len(self.processed_data.index)
@@ -42,7 +40,7 @@ class NeuralNet:
         self.X_test = scaler.transform(self.X_test)
         return 0
 
-    # TODO: Train and evaluate models for all combinations of parameters
+    # Train and evaluate models for all combinations of parameters
     # specified. We would like to obtain following outputs:
     #   1. Training Accuracy and Error (Loss) for every model
     #   2. Test Accuracy and Error (Loss) for every model
@@ -126,7 +124,7 @@ class NeuralNet:
 
                         network_index+=1
 
-        # TODO: Plot the model history for each model in a single plot
+        # Plot the model history for each model in a single plot
         # model history is a plot of accuracy vs number of epochs
         # you may want to create a large sized plot to show multiple lines
         # in a same figure.
