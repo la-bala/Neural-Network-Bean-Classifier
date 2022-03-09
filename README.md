@@ -8,7 +8,7 @@
 In a terminal, execute:\
 python NeuralNet-2.py
 
-Make sure all libraries used, listed below, are installed.\
+Make sure all libraries that are imported in the program are installed. See "Libraries and Sources Used" below.
 
 Results of each model are printed to standard output as well as included in a outputtable.csv file created after the program is run. Each run will update outputtable.csv.\
 If you are getting a 'permission denied' error for outputtable.csv make sure you close the file in Excel or whatever viewer you are using then run the program again.\
